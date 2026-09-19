@@ -19,6 +19,8 @@ from .services import WalletService
 from .tatum import TatumClient
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 
 async def post_init(application: Application) -> None:
@@ -93,7 +95,12 @@ async def initialize_db(application: Application) -> None:
 
 
 if __name__ == "__main__":
-    app = build_application()
     import asyncio
-    asyncio.get_event_loop().run_until_complete(initialize_db(app))
+
+    # AsyncMongoClient binds to the event loop used for its first operation.
+    # Keep database initialization and Telegram polling on that same loop.
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    app = build_application()
+    loop.run_until_complete(initialize_db(app))
     app.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)

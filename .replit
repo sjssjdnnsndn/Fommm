@@ -11,6 +11,26 @@ env = { "CI" = "true" }
 [workflows]
 runButton = "Project"
 
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "TRON Testnet Wallet Bot"
+
+[[workflows.workflow]]
+name = "TRON Testnet Wallet Bot"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd tatum-tron-wallet-bot && TRON_NETWORK=shasta ALLOW_MAINNET_PRIVATE_KEY_SIGNING=false USDT_TRC20_CONTRACT= MONGODB_DB=tatum_tron_wallet_testnet python -m app.main"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
 [agent]
 stack = "PNPM_WORKSPACE"
 expertMode = true
