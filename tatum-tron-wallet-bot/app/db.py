@@ -70,7 +70,6 @@ class Database:
                     "created_at": utcnow(),
                     "pin_hash": None,
                     "tron_index": None,
-                    "tron_address": None,
                     "last_deposit_scan_ms": 0,
                 },
             },
@@ -254,7 +253,7 @@ class Database:
         await self.users.update_one({"user_id": user_id}, {"$set": {"last_deposit_scan_ms": timestamp_ms}})
 
     async def get_users_for_scan(self, limit: int) -> list[dict]:
-        cur = self.users.find({"tron_address": {"$ne": None}}).sort("last_deposit_scan_ms", ASCENDING).limit(limit)
+        cur = self.users.find({"tron_address": {"$type": "string"}}).sort("last_deposit_scan_ms", ASCENDING).limit(limit)
         return await cur.to_list(length=limit)
 
     async def count_users(self) -> int:
