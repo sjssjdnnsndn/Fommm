@@ -1,0 +1,28 @@
+services:
+  - type: worker
+    name: tatum-tron-wallet-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: tatum_tron_wallet
+      - key: TATUM_API_KEY
+        sync: false
+      - key: TATUM_BASE_URL
+        value: https://api.tatum.io
+      - key: TRON_NETWORK
+        value: shasta
+      - key: TRON_MNEMONIC
+        sync: false
+      - key: TRON_XPUB
+        sync: false
+      - key: USDT_TRC20_CONTRACT
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: ALLOW_MAINNET_PRIVATE_KEY_SIGNING
+        value: "false"
